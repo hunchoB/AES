@@ -78,19 +78,17 @@ public class Controller {
 
         try (DirectoryStream<Path> files = Files.newDirectoryStream(path))
         {
-            for (Path temp : files)
+            for (Path temp : files) {
 
                 langs.add(temp.toString());
-
+                KeyGeneration.keysMap.put(temp.toString(), ReadObject.main(temp.toString()));
+            }
 //                    System.out.println(temp.toString());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 //Конец подгрузки
-
-
-
 
         keySize1.setOnAction(actionEvent -> {
             keySize = 128;
@@ -114,20 +112,10 @@ public class Controller {
                 chooseKey.setItems(langs);
                 String nameKey = nameOfGeneratedKey.getText();
                 System.out.println(nameKey);
-                try {
-
-                    FileOutputStream fos = new FileOutputStream("keys/" + nameKey);
-                    ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-                    oos.writeObject(secretKey);
-                    oos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (NoSuchAlgorithmException e) {
+                WriteObject.main(secretKey, nameKey);
+        } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
-            }
-        });
+            }});
 
         encryptText.setOnAction(actionEvent -> {
             try {
