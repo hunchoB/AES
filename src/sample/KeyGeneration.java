@@ -19,7 +19,7 @@ public class KeyGeneration implements Serializable {
 //        int keyBitSize = 256;
 
         keyGenerator.init(keySize, secureRandom);
-        System.out.println("keyGen" + keySize);
+        //System.out.println("keyGen" + keySize);
         SecretKey secretKey = keyGenerator.generateKey();
         keysMap.put(keyName, secretKey);
         return secretKey;
