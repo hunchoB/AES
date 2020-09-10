@@ -72,23 +72,24 @@ public class Controller {
 
     @FXML
     void initialize() {
+
         // Подгрузка ключей в комбо бокс
         Path path = Path.of("keys");
 
-        try (DirectoryStream<Path> files = Files.newDirectoryStream(path))
-        {
+        try (DirectoryStream<Path> files = Files.newDirectoryStream(path)) {
             for (Path temp : files) {
 
-                langs.add(temp.toString());
-                KeyGeneration.keysMap.put(temp.toString(), ReadObject.main(temp.toString()));
+                langs.add(temp.getFileName().toString());
+                KeyGeneration.keysMap.put(temp.getFileName().toString(), ReadObject.main(temp.toString()));
             }
 //                    System.out.println(temp.toString());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println(KeyGeneration.keysMap.keySet());
 //Конец подгрузки
-        AtomicReference<String> nameOfKey=null;
+        AtomicReference<String> nameOfKey = null;
 
         keySize1.setOnAction(actionEvent -> {
             keySize = 128;
@@ -97,7 +98,7 @@ public class Controller {
 
         keySize2.setOnAction(actionEvent -> {
             keySize = 192;
-           // System.out.println("192 chosen");
+            // System.out.println("192 chosen");
         });
 
         keySize3.setOnAction(actionEvent -> {
@@ -106,16 +107,20 @@ public class Controller {
         });
 
         keyGenerationButton.setOnAction(actionEvent -> {
-            try {
-                SecretKey secretKey = KeyGeneration.generation(nameOfGeneratedKey.getText(), keySize);
-                langs.add(nameOfGeneratedKey.getText());
-                chooseKey.setItems(langs);
-                String nameKey = nameOfGeneratedKey.getText();
-                System.out.println(nameKey);
-                WriteObject.main(secretKey, nameKey);
-        } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }});
+            if (!nameOfGeneratedKey.getText().isEmpty() && !KeyGeneration.keysMap.containsKey(nameOfGeneratedKey.getText())
+                    && (nameOfGeneratedKey.getText().length() < 15)) {
+                try {
+                    SecretKey secretKey = KeyGeneration.generation(nameOfGeneratedKey.getText(), keySize);
+                    langs.add(nameOfGeneratedKey.getText());
+                    chooseKey.setItems(langs);
+                    String nameKey = nameOfGeneratedKey.getText();
+                    System.out.println(nameKey);
+                    WriteObject.main(secretKey, nameKey);
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         encryptText.setOnAction(actionEvent -> {
             try {
@@ -167,8 +172,9 @@ public class Controller {
             String nameKey = chooseKey.getValue();
             //System.out.println(nameKey);
             DeleteKey.main(nameKey);
-            langs.remove(chooseKey.getValue());
             KeyGeneration.keysMap.remove(chooseKey.getValue());
+            langs.remove(chooseKey.getValue());
+
 
         });
 
