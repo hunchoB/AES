@@ -1,19 +1,17 @@
 package sample;
 
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -23,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
 import javax.crypto.SecretKey;
+import javax.swing.*;
 
 public class Controller {
 
@@ -89,7 +88,7 @@ public class Controller {
             e.printStackTrace();
         }
 //Конец подгрузки
-
+        AtomicReference<String> nameOfKey=null;
 
         keySize1.setOnAction(actionEvent -> {
             keySize = 128;
@@ -165,8 +164,9 @@ public class Controller {
         });
 
         buttonDeleteKey.setOnAction(actionEvent -> {
-            //String nameOfKey = nameOfGeneratedKey.getText();
-            //DeleteKey.main(nameOfKey);
+            String nameKey = chooseKey.getValue();
+            //System.out.println(nameKey);
+            DeleteKey.main(nameKey);
             langs.remove(chooseKey.getValue());
             KeyGeneration.keysMap.remove(chooseKey.getValue());
 
