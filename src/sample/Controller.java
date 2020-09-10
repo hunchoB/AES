@@ -90,6 +90,7 @@ public class Controller {
         }
 //Конец подгрузки
 
+
         keySize1.setOnAction(actionEvent -> {
             keySize = 128;
             //System.out.println("128 chozen");
@@ -164,8 +165,11 @@ public class Controller {
         });
 
         buttonDeleteKey.setOnAction(actionEvent -> {
+            //String nameOfKey = nameOfGeneratedKey.getText();
+            //DeleteKey.main(nameOfKey);
             langs.remove(chooseKey.getValue());
             KeyGeneration.keysMap.remove(chooseKey.getValue());
+
         });
 
 
